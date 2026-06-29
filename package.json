@@ -1,0 +1,43 @@
+{
+  "name": "rinhany-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Algorithm benchmark engine — rinha de qualquer coisa",
+  "keywords": [
+    "benchmark",
+    "algorithm",
+    "rinha",
+    "typescript"
+  ],
+  "author": "Sidarta Veloso <sidartaveloso@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sidartaveloso/rinhany.git"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "check": "turbo run lint typecheck",
+    "format": "biome check --write .",
+    "format:check": "biome check .",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "demo:ordenacao": "pnpm --filter @rinhany/demo-ordenacao dev"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.16",
+    "@changesets/cli": "^2.31.0",
+    "turbo": "^2.9.18",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.2"
+  }
+}

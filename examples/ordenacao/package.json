@@ -1,0 +1,21 @@
+{
+  "name": "@rinhany/demo-ordenacao",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Demo: rinha de algoritmos de ordenação",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/run.ts",
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@rinhany/core": "workspace:*",
+    "@rinhany/cli": "workspace:*",
+    "rinhany": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.4",
+    "typescript": "^5.8.3"
+  }
+}
