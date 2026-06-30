@@ -25,6 +25,9 @@
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
+    "build:docs": {
+      "outputs": ["docs/.vitepress/dist/**"]
+    },
     "clean": {
       "cache": false
     }

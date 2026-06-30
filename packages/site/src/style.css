@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+@utility nav-blur {
+  background-color: rgb(5 7 13 / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@utility gradient-text {
+  background: linear-gradient(to right, #f87171, #fb923c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.6s ease-out forwards;
+}
+
+@utility code-block {
+  background-color: #0c1019;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility delay-1 {
+  animation-delay: 0.1s;
+}
+
+@utility delay-2 {
+  animation-delay: 0.2s;
+}
+
+@utility delay-3 {
+  animation-delay: 0.3s;
+}
+
+@utility delay-4 {
+  animation-delay: 0.4s;
+}
+
+@utility delay-5 {
+  animation-delay: 0.5s;
+}
