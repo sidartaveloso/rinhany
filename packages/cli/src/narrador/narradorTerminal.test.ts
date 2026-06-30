@@ -289,5 +289,188 @@ describe("criarNarradorTerminal", () => {
       const tudo = linhas.join("\n");
       expect(tudo).toContain("1234ms");
     });
+
+    it("onRinhaIniciar com tema.iniciar retornando canvas renderiza ANSI", () => {
+      const linhas: string[] = [];
+      const cmdCanvas = {
+        tipo: "canvas" as const,
+        pixels: [
+          ["verde" as const, "laranja" as const],
+          ["branco" as const, "nenhuma" as const],
+        ],
+        textos: [{ y: 0, x: 0, texto: "TITLE" }],
+      };
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema canvas",
+        descrever: () => "",
+        iniciar: () => [cmdCanvas],
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+      });
+
+      narrador.onRinhaIniciar(ctxRinha);
+
+      expect(linhas).toHaveLength(1);
+      expect(linhas[0]).toContain("\x1b[42m");
+      expect(linhas[0]).toContain("\x1b[43m");
+      expect(linhas[0]).toContain("\x1b[47m");
+      expect(linhas[0]).toContain("TITLE");
+    });
+
+    it("comando limpar não lança exceção", () => {
+      const linhas: string[] = [];
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema com limpar",
+        descrever: () => "",
+        iniciar: () => [
+          { tipo: "texto" as const, conteudo: "antes" },
+          { tipo: "limpar" as const },
+          { tipo: "texto" as const, conteudo: "depois" },
+        ],
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+      });
+
+      expect(() => narrador.onRinhaIniciar(ctxRinha)).not.toThrow();
+      expect(linhas).toEqual(["antes", "depois"]);
+    });
+
+    it("onRodadaIniciar com tema.rodadaIniciar renderiza comandos", () => {
+      const linhas: string[] = [];
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema com rodadaIniciar",
+        descrever: () => "",
+        rodadaIniciar: () => [
+          { tipo: "texto", conteudo: "ROUND 1/3" },
+          { tipo: "texto", conteudo: "Dataset X" },
+        ],
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+      });
+
+      narrador.onRodadaIniciar(ctxRodada);
+
+      expect(linhas).toEqual(["ROUND 1/3", "Dataset X"]);
+    });
+
+    it("onExecucaoIniciar com tema não escreve nada", () => {
+      const linhas: string[] = [];
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema",
+        descrever: () => "",
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+      });
+
+      narrador.onExecucaoIniciar(ctxExecucao);
+
+      expect(linhas).toHaveLength(0);
+    });
+
+    it("onExecucaoFinalizar com tema não escreve nada", () => {
+      const linhas: string[] = [];
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema",
+        descrever: () => "",
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+      });
+
+      narrador.onExecucaoFinalizar(ctxExecucaoOk);
+
+      expect(linhas).toHaveLength(0);
+    });
+
+    it("onRodadaFinalizar com tema não escreve nada", () => {
+      const linhas: string[] = [];
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema",
+        descrever: () => "",
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+      });
+
+      narrador.onRodadaFinalizar(ctxRodadaFinalizada);
+
+      expect(linhas).toHaveLength(0);
+    });
+
+    it("pausar com duracao zero não trava", () => {
+      const linhas: string[] = [];
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema",
+        descrever: () => "",
+        eventoLuta: () => [
+          { tipo: "pausa", duracao_ms: 0 },
+          { tipo: "texto", conteudo: "ok" },
+        ],
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+      });
+
+      expect(() =>
+        narrador.onEventoLuta({
+          tipo: "golpe",
+          ctx: { agressor: algoId("A"), vitima: algoId("B"), intensidade: 0.5 },
+          timestamp_ms: 0,
+        }),
+      ).not.toThrow();
+      expect(linhas).toEqual(["ok"]);
+    });
+
+    it("onEventoLuta com tema.eventoLuta e resolverNome passa opts", () => {
+      const linhas: string[] = [];
+      const temaFake: RinhaTheme = {
+        nome: "Teste",
+        descricao: "Tema",
+        descrever: () => "",
+        eventoLuta: (_evento, opts) => {
+          const nome = opts?.resolverNome?.("A") ?? "A";
+          return [{ tipo: "texto", conteudo: `Lutador: ${nome}` }];
+        },
+      };
+
+      const narrador = criarNarradorTerminal({
+        escrever: (l) => linhas.push(l),
+        tema: temaFake,
+        resolverNome: (id) => ({ A: "Alfa" })[id] ?? id,
+      });
+
+      narrador.onEventoLuta({
+        tipo: "golpe",
+        ctx: { agressor: algoId("A"), vitima: algoId("B"), intensidade: 0.5 },
+        timestamp_ms: 0,
+      });
+
+      expect(linhas).toEqual(["Lutador: Alfa"]);
+    });
   });
 });

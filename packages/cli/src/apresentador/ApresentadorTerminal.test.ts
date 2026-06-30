@@ -128,4 +128,59 @@ describe("apresentadorTerminal", () => {
     const linhas = capturar(semVencedor);
     expect(linhas.every((l) => !l.toLowerCase().includes("vencedor"))).toBe(true);
   });
+
+  it("tempo médio em segundos quando >= 1000ms", () => {
+    const relatorio = relatorioBase();
+    const lento: RelatorioRinha<ResultadoFake, MetricasFake[]> = {
+      ...relatorio,
+      resultados: [resultado("algo-x", 1500), resultado("algo-y", 2500)],
+      comparacao: {
+        ...relatorio.comparacao,
+        resultados_matriz: new Map([
+          [id("algo-x"), new Map([[did("ds-1"), resultado("algo-x", 1500)]])],
+          [id("algo-y"), new Map([[did("ds-1"), resultado("algo-y", 2500)]])],
+        ]),
+        rankings: new Map([["Velocidade", [id("algo-x"), id("algo-y")]]]),
+        vencedor: id("algo-x"),
+      },
+      sumario: {
+        total_execucoes: 2,
+        execucoes_com_sucesso: 2,
+        execucoes_com_erro: 0,
+        tempo_total_ms: 4000,
+      },
+    };
+    const linhas = capturar(lento);
+    const saida = linhas.join("\n");
+    expect(saida).toContain("1.50s");
+    expect(saida).toContain("2.50s");
+    expect(saida).toContain("4.00s");
+  });
+
+  it("tempo em microsegundos quando < 1ms", () => {
+    const relatorio = relatorioBase();
+    const rapido: RelatorioRinha<ResultadoFake, MetricasFake[]> = {
+      ...relatorio,
+      resultados: [resultado("algo-x", 0.5), resultado("algo-y", 0.05)],
+      comparacao: {
+        ...relatorio.comparacao,
+        resultados_matriz: new Map([
+          [id("algo-x"), new Map([[did("ds-1"), resultado("algo-x", 0.5)]])],
+          [id("algo-y"), new Map([[did("ds-1"), resultado("algo-y", 0.05)]])],
+        ]),
+        rankings: new Map([["Velocidade", [id("algo-x"), id("algo-y")]]]),
+        vencedor: id("algo-y"),
+      },
+      sumario: {
+        total_execucoes: 2,
+        execucoes_com_sucesso: 2,
+        execucoes_com_erro: 0,
+        tempo_total_ms: 0.55,
+      },
+    };
+    const linhas = capturar(rapido);
+    const saida = linhas.join("\n");
+    expect(saida).toContain("µs");
+    expect(saida).toContain("500µs");
+  });
 });
