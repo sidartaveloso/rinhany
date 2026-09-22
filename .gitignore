@@ -60,3 +60,5 @@ secrets.json
 *.tsbuildinfo
 .cache
 cache/
+# taskin: estado local do usuário (identidade por máquina, não é config do projeto)
+.taskin/
