@@ -2,6 +2,13 @@
   "name": "@rinhany/core",
   "version": "0.1.0",
   "description": "Rinhany engine core — executor, ringue, types, juiz, logger",
+  "license": "MIT",
+  "author": "Sidarta Veloso <sidartaveloso@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidartaveloso/rinhany.git",
+    "directory": "packages/core"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

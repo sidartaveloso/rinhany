@@ -2,6 +2,13 @@
   "name": "@rinhany/testing",
   "version": "0.1.0",
   "description": "Rinhany testing utilities — contract tests for BaseAlgoritmo",
+  "license": "MIT",
+  "author": "Sidarta Veloso <sidartaveloso@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidartaveloso/rinhany.git",
+    "directory": "packages/testing"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,6 +28,9 @@
   },
   "dependencies": {
     "@rinhany/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "vitest": ">=3.2.0"
   },
   "devDependencies": {
     "typescript": "^5.8.3",

@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
 
 permissions:
+  # id-token: trusted publishing do npm (OIDC) e a proveniencia dos pacotes
+  id-token: write
   contents: write
   issues: write
   pull-requests: write
@@ -31,6 +33,7 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -40,3 +43,14 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+
+      # Publica so as versoes que ainda nao estao no npm (@rinhany/core,
+      # @rinhany/cli, @rinhany/testing e o guarda-chuva rinhany). O site e privado.
+      # A primeira publicacao e manual (`pnpm changeset publish` logado no npm):
+      # o trusted publishing so se configura num pacote que ja existe. Ate la,
+      # o NPM_TOKEN do repositorio cobre o workflow.
+      - name: Publish to npm
+        run: pnpm changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'

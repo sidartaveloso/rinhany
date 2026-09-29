@@ -2,6 +2,13 @@
   "name": "@rinhany/cli",
   "version": "0.1.0",
   "description": "Rinhany terminal UI — apresentador, narrador, publico, tema boxe",
+  "license": "MIT",
+  "author": "Sidarta Veloso <sidartaveloso@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidartaveloso/rinhany.git",
+    "directory": "packages/cli"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
