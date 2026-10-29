@@ -15,8 +15,10 @@ Nenhum pacote do rinhany está no npm; quem usa entra por `link:../rinhany/packa
 - [x] `license`, `author` e `repository` (com `directory`) nos quatro manifestos; `.changeset/config.json` com `access: public` (pacote com escopo nasce privado sem isso)
 - [x] `release.yml` ganha o passo `pnpm changeset publish`, com `id-token: write` e proveniência; o `NPM_TOKEN` do repositório cobre o workflow até o trusted publishing ser configurado
 - [x] Verificação: `pnpm build` e `pnpm test` verdes (core 37, cli 61); `pnpm pack --dry-run` do core e do testing só leva `dist/`, sem teste; `import('rinhany')` não traz mais `testarBaseAlgoritmo`
-- [ ] Primeira publicação, manual, logado no npm: `pnpm build && pnpm changeset publish` na raiz (publica `@rinhany/core`, `@rinhany/cli`, `@rinhany/testing` e `rinhany` em 0.1.0; o site e o exemplo são privados)
-- [ ] Configurar o trusted publishing de cada pacote no npmjs.com, depois que ele existir, e tirar o `NPM_TOKEN`
+- [x] Primeira publicação, manual, logado no npm: `pnpm build && pnpm changeset publish` na raiz (publica `@rinhany/core`, `@rinhany/cli`, `@rinhany/testing` e `rinhany` em 0.1.0; o site e o exemplo são privados)
+- [ ] Configurar o trusted publishing de cada pacote no npmjs.com (repositório `sidartaveloso/rinhany`, workflow `release.yml`); o `NPM_TOKEN` nunca chegou a existir no repositório
+- [x] O `release.yml` roda sozinho a cada push na `main` pelo `changesets/action`: abre o PR "chore: version packages" quando há changesets e publica por OIDC quando ele entra; o `workflow_dispatch` fica para repetir um release
+- [ ] Permitir que o GitHub Actions abra pull requests no repositório (Settings → Actions → General), para o PR de versão
 - [ ] Desligar os eventos `golpe`/`nocaute` por tempo quando a rinha não é de tempo — adiado: a task-141 do taskin usa narrador silencioso e não precisa; é a task-008 do veloso-play
 
 ## Notes

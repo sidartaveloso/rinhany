@@ -31,6 +31,8 @@
     "format": "biome check --write .",
     "format:check": "biome check .",
     "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "changeset:version": "changeset version && pnpm install --lockfile-only",
+    "changeset:publish": "changeset publish",
     "demo:ordenacao": "pnpm --filter @rinhany/demo-ordenacao dev"
   },
   "devDependencies": {
